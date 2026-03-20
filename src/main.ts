@@ -8,31 +8,29 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Euro-Inventory API')
-    .setDescription('Inventory Management System - GDPR Compliant')
+    .setDescription('Inventory Management System')
     .setVersion('1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  // --- ESTA É A PARTE PARA O VERCEL (Coloque aqui) ---
-  const CSS_URL = "https://cdnjs.cloudflare.com";
-  const JS_URL = [
-    "https://cdnjs.cloudflare.com",
-    "https://cdnjs.cloudflare.com",
-  ];
+  // Truque de Sênior: Carrega CDN apenas se estiver na Vercel (Produção)
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+  
+  const swaggerOptions = isProduction ? {
+    customCssUrl: "https://cdnjs.cloudflare.com",
+    customJs: [
+      "https://cdnjs.cloudflare.com",
+      "https://cdnjs.cloudflare.com",
+    ],
+  } : {};
 
-  SwaggerModule.setup('api/docs', app, document, {
-    customCssUrl: CSS_URL,
-    customJs: JS_URL,
-  });
-  // --------------------------------------------------
+  SwaggerModule.setup('api/docs', app, document, swaggerOptions);
 
   app.enableCors();
-
+  
   const port = process.env.PORT || 3000;
   await app.listen(port);
   console.log(`✅ API ONLINE: http://localhost:${port}/api/docs`);
 }
-
 bootstrap();
-export default (req: any, res: any) => {}; // Adicione isso para ajudar a Vercel
