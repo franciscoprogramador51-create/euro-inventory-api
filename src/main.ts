@@ -14,7 +14,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  // Links CDN para o Swagger funcionar na Vercel
+  // --- ESTA É A PARTE PARA O VERCEL (Coloque aqui) ---
   const CSS_URL = "https://cdnjs.cloudflare.com";
   const JS_URL = [
     "https://cdnjs.cloudflare.com",
@@ -25,6 +25,7 @@ async function bootstrap() {
     customCssUrl: CSS_URL,
     customJs: JS_URL,
   });
+  // --------------------------------------------------
 
   app.enableCors();
 
@@ -33,4 +34,5 @@ async function bootstrap() {
   console.log(`✅ API ONLINE: http://localhost:${port}/api/docs`);
 }
 
-bootstrap(); // Garante que esta linha existe para iniciar a função
+bootstrap();
+export default (req: any, res: any) => {}; // Adicione isso para ajudar a Vercel
