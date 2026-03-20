@@ -6,15 +6,24 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('Euro-Inventory API')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+ // No seu main.ts, dentro da função bootstrap:
 
-  // Força o host 0.0.0.0 para o Windows não bloquear
-  await app.listen(3000, '0.0.0.0');
-  console.log(`🚀 API ONLINE: http://localhost:3000/api/docs`);
-}
-bootstrap();
+const config = new DocumentBuilder()
+  .setTitle('Euro-Inventory API')
+  .setDescription('Inventory Management System - GDPR Compliant')
+  .setVersion('1.0')
+  .build();
+
+const document = SwaggerModule.createDocument(app, config);
+
+// O SEGREDO PARA VERCEL: Usamos links externos para o CSS e JS do Swagger
+const CSS_URL = "https://cdnjs.cloudflare.com";
+const JS_URL = [
+  "https://cdnjs.cloudflare.com",
+  "https://cdnjs.cloudflare.com",
+];
+
+SwaggerModule.setup('api/docs', app, document, {
+  customCssUrl: CSS_URL,
+  customJs: JS_URL,
+});
